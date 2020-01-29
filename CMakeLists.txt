@@ -28,6 +28,11 @@ set(APPLICATION_SOURCE
     src/triangulation.h
 )
 
+# dirent on Windows
+if (WIN32)
+    list(APPEND APPLICATION_SOURCE src/dirent/dirent.c)
+endif()
+
 add_executable(draw ${APPLICATION_SOURCE})
 
 target_link_libraries(draw PUBLIC CGL)
@@ -38,6 +43,11 @@ target_link_libraries(draw PUBLIC CGL)
 add_subdirectory(CGL)
 target_include_directories(draw PUBLIC ${CGL_INCLUDE_DIRS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CGL_CXX_FLAGS}")
+
+# dirent on Windows
+if (WIN32)
+    target_include_directories(draw PUBLIC ${CMAKE_SOURCE_DIR}/src/dirent)
+endif()
 
 #-------------------------------------------------------------------------------
 # Add subdirectories

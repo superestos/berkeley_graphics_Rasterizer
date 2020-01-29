@@ -93,6 +93,17 @@ void RasterizerImp::rasterize_interpolated_color_triangle(float x0, float y0, Co
 
 }
 
+void RasterizerImp::rasterize_textured_triangle(float x0, float y0, float u0, float v0,
+    float x1, float y1, float u1, float v1,
+    float x2, float y2, float u2, float v2,
+    Texture& tex)
+{
+    // TODO: Task 5: Fill in the SampleParams struct and pass it to the tex.sample function.
+    // TODO: Task 6: Set the correct barycentric differentials in the SampleParams struct.
+    // Hint: You can reuse code from rasterize_triangle/rasterize_interpolated_color_triangle
+
+}
+
 void RasterizerImp::set_sample_rate(unsigned int rate) {
   // TODO: Task 2: You may want to update this function for supersampling support
 
