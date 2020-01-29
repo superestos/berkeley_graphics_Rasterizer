@@ -289,7 +289,7 @@ Students will vote on their favorite submissions and the top voted submission(s)
 
 ## Submission
 
-Please consult this article on [how to build and submit assignments for CS 184](https://cs184.eecs.berkeley.edu/sp19/article/8/building-and-submitting-cs184-as).
+Please consult this article on [how to build and submit assignments for CS 184](https://cs184.eecs.berkeley.edu/sp20/article/11/building-and-submitting-cs184-as).
 
 You will submit your code as well as some deliverables (see below) in a webpage project write-up.
 
