@@ -22,7 +22,7 @@ The project has 6 tasks, worth a total of 100 possible points. Some require only
 ## Logistics
 
 ### Deadline
-* **Project 1** is due **Tuesday 2/18, 11:59PM**. The **checkpoint** is due **Tuesday 2/11, 11:59PM.** For the project, both your code and write-up need to be turned in for your submission to be complete. Assignments which are turned in after 11:59pm will use one of your late days -- there are no late minutes or late hours.
+* **Project 1** is due **Tuesday 2/18, 11:59PM**. The [**checkpoint quiz**](https://forms.gle/DQKEiZzFvFxKYMU69) is due **Tuesday 2/11, 11:59PM.** For the project, both your code and write-up need to be turned in for your submission to be complete. Assignments which are turned in after 11:59pm will use one of your late days -- there are no late minutes or late hours.
 
 
 ### Getting started
