@@ -22,7 +22,7 @@ The project has 6 tasks, worth a total of 100 possible points. Some require only
 ## Logistics
 
 ### Deadline
-* Project 1 is due XXX. Both your code and write-up need to be turned in for your submission to be complete; assignments which are turned in after 11:59pm will use one of your late days -- there are no late minutes or late hours.
+* **Project 1** is due **Tuesday 2/18, 11:59PM**. The **checkpoint** is due **Tuesday 2/11, 11:59PM.** For the project, both your code and write-up need to be turned in for your submission to be complete. Assignments which are turned in after 11:59pm will use one of your late days -- there are no late minutes or late hours.
 
 
 ### Getting started
@@ -54,7 +54,7 @@ You can run the executable with the command
 
     ./draw [path to svg file/folder to render]
 
-After writing some code in part 1, you can run something like: 
+For example, you could run this command: 
     
     ./draw ../svg/basic/test1.svg
 
@@ -87,6 +87,7 @@ In addition to modifying these, you will need to understand other source and hea
 
 Here is a brief sketch of what happens when you launch `draw`: An `SVGParser` (in `svgparser.h/cpp`) reads in the input *svg* file(s), launches a OpenGL `Viewer` containing a `DrawRend` (in `drawrend.h/cpp`) renderer, which enters an infinite loop and waits for input from the mouse and keyboard. In `DrawRend::redraw()` function, the high-level drawing work is done by the various `SVGElement` child classes (in `svg.h/cpp`), which then pass their low-level point, line, and triangle rasterization data to appropriate methods of a `Rasterizer` class.
 
+In fact, now might be a good time to finish the [Checkpoint Quiz](https://forms.gle/m77tfLskx55wBCb49) due Tuesday 2/11.
 
 ### A Simple Example: Drawing Points
 
@@ -138,7 +139,7 @@ In this task, you will implement the `rasterize_triangle` function in `rasterize
 * Rasterize the triangle by using the sampling methods described in class. 
 * For each pixel, please perform the point-in-triangle tests with a sample point in the center of the pixel, not the corner. The coordinates of your sample should be equal to an integer point plus (.5,.5).
 * In Part 2 you will implement sub-pixel supersampling, but here you should just sample once per pixel and call the `fill_pixel()` helper function. Follow the example in the `rasterize_point` function in the starter code. 
-* To receive full credit, your implementation should assume that a sample on the boundary of the triangle is to be drawn. You are encouraged but not required to implement the OpenGL edge rules for samples lying exactly on an edge.
+* To receive full credit, your implementation should assume that a sample on the boundary of the triangle is to be drawn. You are encouraged but not required to implement the OpenGL edge rules for samples lying exactly on an edge. Do make sure that none of your edges are left un-rasterized.
 * Your implementation should be at least as efficient as sampling only within the bounding box of the triangle (not simply every pixel in the framebuffer).
 * Your code should draw the triangle regardless of the winding order of the vertices (i.e. clockwise or counter-clockwise). Check `svg/basic/test6.svg`.
 
