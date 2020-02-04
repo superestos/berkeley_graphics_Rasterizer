@@ -33,15 +33,16 @@ First, accept the assignment in your CS184 website profile, following the instru
     
 Also ensure GitHub Pages is enabled for your assignment.
 
-Please consult this article for more information on [how to build and submit assignments for CS 184](https://cs184.eecs.berkeley.edu/sp19/article/8/building-and-submitting-cs184-as).
+Please consult this [how to build and submit assignments for CS 184](https://cs184.eecs.berkeley.edu/sp20/article/11/building-and-submitting-cs184-as) article for more information on how to setup and build the project.
 
-As you go through the assignment, [refer to the write-up guidelines and deliverables section below](#rubric). **It is recommended that you accumulate deliverables into sections in your webpage write-up as you work through the project.** You may find it helpful to skim this section before beginning your work.
+As you go through the assignment, [refer to the write-up guidelines and deliverables section below](#rubric). **It is recommended that you complete each section's write-up as you finish that section.** It's generally not a good idea to wait until the end to start your writeup. You may also find it helpful to skim the rubric before beginning your work.
 
 *Important: To avoid compression artifacts in your images, please do not convert the PNG screenshot images saved by the GUI into JPG or other formats!  PNG images are losslessly compressed.* 
 
 Finally, you may find the following resources helpful: 
-**[C++ Guide](https://cs184.eecs.berkeley.edu/sp19/article/11/c-basics)** for some quick tips and tricks on getting started with C++. A slightly more detailed C++ guide can be [found here](https://github.com/Bryce-Summers/Writings/blob/master/Programming%20Guides/C_plus_plus_guide.pdf).
-**[Images as Data](https://cs184.eecs.berkeley.edu/sp19/article/7/images-as-data)** on how images and colors are often represented in code.
+**[C++ Guide](https://cs184.eecs.berkeley.edu/sp20/article/9/c-intro)** for some quick tips and tricks on getting started with C++. A slightly more detailed C++ guide can be [found here](https://github.com/Bryce-Summers/Writings/blob/master/Programming%20Guides/C_plus_plus_guide.pdf).
+**[Images as Data](https://cs184.eecs.berkeley.edu/sp20/article/7/images-as-data)** on how images and colors are often represented in code.
+**[Vectors and Matrices in the CGL Library](https://cs184.eecs.berkeley.edu/sp20/article/12/primer-on-using-vectors-and-matr) for a quick refresher on declaring and using vectors and matrices.
 
 <p>
   <img src="https://cs184.eecs.berkeley.edu/cs184_sp16_content/article_images/3_7.jpg" width="800px" align="middle"/>
