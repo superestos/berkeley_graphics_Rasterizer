@@ -140,3 +140,5 @@ endif()
 
 # Install settings
 set(CMAKE_INSTALL_PREFIX "${CGL_SOURCE_DIR}")
+
+set(CGL_CXX_FLAGS "${CGL_CXX_FLAGS}" PARENT_SCOPE)
