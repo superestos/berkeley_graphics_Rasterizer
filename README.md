@@ -41,8 +41,10 @@ As you go through the assignment, [refer to the write-up guidelines and delivera
 
 Finally, you may find the following resources helpful: 
 **[C++ Guide](https://cs184.eecs.berkeley.edu/sp20/article/9/c-intro)** for some quick tips and tricks on getting started with C++. A slightly more detailed C++ guide can be [found here](https://github.com/Bryce-Summers/Writings/blob/master/Programming%20Guides/C_plus_plus_guide.pdf).
+
 **[Images as Data](https://cs184.eecs.berkeley.edu/sp20/article/7/images-as-data)** on how images and colors are often represented in code.
-**[Vectors and Matrices in the CGL Library](https://cs184.eecs.berkeley.edu/sp20/article/12/primer-on-using-vectors-and-matr) for a quick refresher on declaring and using vectors and matrices.
+
+**[Vectors and Matrices in the CGL Library](https://cs184.eecs.berkeley.edu/sp20/article/12/primer-on-using-vectors-and-matr)** for a quick refresher on declaring and using vectors and matrices.
 
 <p>
   <img src="https://cs184.eecs.berkeley.edu/cs184_sp16_content/article_images/3_7.jpg" width="800px" align="middle"/>
