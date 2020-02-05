@@ -32,7 +32,7 @@ endif()
 #-------------------------------------------------------------------------------
 # Compiler-specific Options
 #-------------------------------------------------------------------------------
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang OR ${CMAKE_CXX_COMPILER_ID} STREQUAL AppleClang)
     set(CGL_CXX_FLAGS "-std=c++11 -m64")
     if(NOT CGL_BUILD_DEBUG)
         set(CGL_CXX_FLAGS "${CGL_CXX_FLAGS} -O4")
