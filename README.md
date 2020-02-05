@@ -40,6 +40,7 @@ As you go through the assignment, [refer to the write-up guidelines and delivera
 *Important: To avoid compression artifacts in your images, please do not convert the PNG screenshot images saved by the GUI into JPG or other formats!  PNG images are losslessly compressed.* 
 
 Finally, you may find the following resources helpful: 
+
 **[C++ Guide](https://cs184.eecs.berkeley.edu/sp20/article/9/c-intro)** for some quick tips and tricks on getting started with C++. A slightly more detailed C++ guide can be [found here](https://github.com/Bryce-Summers/Writings/blob/master/Programming%20Guides/C_plus_plus_guide.pdf).
 
 **[Images as Data](https://cs184.eecs.berkeley.edu/sp20/article/7/images-as-data)** on how images and colors are often represented in code.
