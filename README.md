@@ -249,24 +249,24 @@ For convenience, here is a list of functions you will need to modify:
 ### Task 6: "Level sampling" with mipmaps for texture mapping (25 pts)
 [**Relevant lecture: 5**](https://cs184.eecs.berkeley.edu/sp19/lecture/5/texture)
 
-Finally, update `RasterizerImp::rasterize_textured_triangle(...)` to support sampling different `MipMap` levels. The GUI toggles `RasterizerImp`'s `LevelSampleMethod` variable `lsm` using the `'L'` key.
+Finally, update `RasterizerImp::rasterize_textured_triangle(...)` to support sampling different `MipMap` levels. The GUI toggles `RasterizerImp`'s `LevelSampleMethod` variable `lsm` using the <kbd>L</kbd> key. **Please implement the following level sampling methods in the helper function `Texture::sample`.**
 
 * When `lsm == L_ZERO`, you should sample from the zero-th `MipMap`, as in Part 5.
-* When `lsm == L_NEAREST`, you should compute the nearest appropriate `MipMap` level using the one-pixel difference vectors `du` and `dv` and pass that level as a parameter to the nearest or bilinear sample function.
-* When `lsm == L_LINEAR`, you should compute the `MipMap` level as a continuous number. Then compute a weighted sum of using one sample from each of the adjacent `MipMap` levels as described in lecture.  Please implement this in 
+* When `lsm == L_NEAREST`, you should compute the nearest appropriate `MipMap` level ~~using the one-pixel difference vectors `du` and `dv`~~ and pass that level as a parameter to the nearest or bilinear sample function.
+* When `lsm == L_LINEAR`, you should compute the `MipMap` level as a continuous number. Then compute a weighted sum of using one sample from each of the adjacent `MipMap` levels as described in lecture. 
 
-Implement `Texture::get_level` as a helper function. You will need $(\frac{du}{dx}, \frac{dv}{dx})$ and $(\frac{du}{dy},\frac{dv}{dy})$ to calculate the correct `MipMap` level. In order to get these values corresponding to a point $p = (x,y)$ inside a triangle, you must:
+In addition, implement `Texture::get_level` as a helper function. You will need $(\frac{du}{dx}, \frac{dv}{dx})$ and $(\frac{du}{dy},\frac{dv}{dy})$ to calculate the correct `MipMap` level. In order to get these values corresponding to a point $p = (x,y)$ inside a triangle, you must perform the following.
 
-1. calculate the barycentric coordinates of $(x+1,y)$ and $(x,y+1)$ in `rasterize_textured_triangle`, passing these to `tri->color` as the variables `p_dx_bary` and `p_dy_bary`,
-2. calculate the *uv* coordinates `sp.p_dx_uv` and `sp.p_dy_uv` inside `tri_color`,
-3. calculate the difference vectors `sp.p_dx_uv - sp.p_uv` and `sp.p_dy_uv - sp.p_uv` inside `Texture::get_level`, and finally
-4. scale up those difference vectors respectively by the width and height of the full-resolution texture image.
+1. Calculate the barycentric coordinates of **$\mathbf{(x,y)}$**, $(x+1,y)$, and $(x,y+1)$ in `rasterize_textured_triangle(...)`, ~~passing these to `tri->color` as the variables `p_dx_bary` and `p_dy_bary`,~~
+2. Calculate the *uv* coordinates of **the three points above, asign them to a `SampleParams` struct `sp`, along with other values required by the struct, and pass `sp` to `Texture::get_level`,** ~~`sp.p_dx_uv` and `sp.p_dy_uv` inside `tri_color`,~~
+3. Calculate the difference vectors `sp.p_dx_uv - sp.p_uv` and `sp.p_dy_uv - sp.p_uv` inside `Texture::get_level`, and finally
+4. Scale up the difference vectors **accordingly** ~~respectively~~ by the width and height of the full-resolution texture image.
 
 With these, you can proceed with the calculation from the lecture slides.
 
 Notes:
 
-* The `lsm` and `psm` variables can be set independently and interact independently. In other words, all combinations of `psm==[P_NEAREST, P_LINEAR] x lsm==[L_ZERO, L_NEAREST, L_LINEAR]` are valid.
+* The `lsm` and `psm` variables can be set independently and interacted independently. In other words, all combinations of `psm==[P_NEAREST, P_LINEAR] x lsm==[L_ZERO, L_NEAREST, L_LINEAR]` are valid.
 * When `lsm == L_LINEAR` and `psm == P_LINEAR`, this is known as trilinear sampling, or trilinear texture filtering, as described in lecture. 
 
 For convenience, here is a list of functions you will need to modify:
@@ -364,6 +364,3 @@ Give a high-level overview of what you implemented in this project. Think about 
 * Pay close attention to your filename extensions. Remember that on UNIX systems (such as the instructional machines), capitalization matters. `.png != .jpeg != .jpg != .JPG`
 * Be sure to adjust the permissions on your files so that they are world readable. For more information on this please see this [tutorial](http://www.grymoire.com/Unix/Permissions.html").
 * Start assembling your webpage early to make sure you have a handle on how to edit the HTML code to insert images and format sections.
-
-
-
