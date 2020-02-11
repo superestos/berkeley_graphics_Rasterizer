@@ -235,9 +235,9 @@ Once Part 5 is done, you should be able to rasterize the *svg* files in *svg/tex
 
 Notes:
 
-* The `Texture` struct in `texture.h` stores a mipmap, as described in lecture, of texture images in decreasing resolution, in the `mipmap` variable. Each texture image is stored as an object of type `MipMap`.
-* `MipMap::texels` stores the texture image pixels in the typical RGB format described above for framebuffer pixels.
-* `MipMap::get_texel(...)` may be helpful.
+* The `Texture` struct in `texture.h` stores a mipmap, as described in lecture, of texture images in decreasing resolution, in the `mipmap` variable. Each texture image is stored as an object of type `MipLevel`.
+* `MipLevel::texels` stores the texture image pixels in the typical RGB format described above for framebuffer pixels.
+* `MipLevel::get_texel(...)` may be helpful.
 
 For convenience, here is a list of functions you will need to modify:
 
@@ -249,13 +249,13 @@ For convenience, here is a list of functions you will need to modify:
 ### Task 6: "Level sampling" with mipmaps for texture mapping (25 pts)
 [**Relevant lecture: 5**](https://cs184.eecs.berkeley.edu/sp19/lecture/5/texture)
 
-Finally, update `RasterizerImp::rasterize_textured_triangle(...)` to support sampling different `MipMap` levels. The GUI toggles `RasterizerImp`'s `LevelSampleMethod` variable `lsm` using the <kbd>L</kbd> key. **Please implement the following level sampling methods in the helper function `Texture::sample`.**
+Finally, update `RasterizerImp::rasterize_textured_triangle(...)` to support sampling different mipmap levels (`MipLevel`s). The GUI toggles `RasterizerImp`'s `LevelSampleMethod` variable `lsm` using the <kbd>L</kbd> key. **Please implement the following level sampling methods in the helper function `Texture::sample`.**
 
-* When `lsm == L_ZERO`, you should sample from the zero-th `MipMap`, as in Part 5.
-* When `lsm == L_NEAREST`, you should compute the nearest appropriate `MipMap` level ~~using the one-pixel difference vectors `du` and `dv`~~ and pass that level as a parameter to the nearest or bilinear sample function.
-* When `lsm == L_LINEAR`, you should compute the `MipMap` level as a continuous number. Then compute a weighted sum of using one sample from each of the adjacent `MipMap` levels as described in lecture. 
+* When `lsm == L_ZERO`, you should sample from the zero-th `MipLevel`, as in Part 5.
+* When `lsm == L_NEAREST`, you should compute the nearest appropriate mipmap level ~~using the one-pixel difference vectors `du` and `dv`~~ and pass that level as a parameter to the nearest or bilinear sample function.
+* When `lsm == L_LINEAR`, you should compute the mipmap level as a continuous number. Then compute a weighted sum of using one sample from each of the adjacent mipmap levels as described in lecture. 
 
-In addition, implement `Texture::get_level` as a helper function. You will need <img src="https://render.githubusercontent.com/render/math?math=(\frac{du}{dx}, \frac{dv}{dx})"> and <img src="https://render.githubusercontent.com/render/math?math=(\frac{du}{dy},\frac{dv}{dy})"> to calculate the correct `MipMap` level. In order to get these values corresponding to a point <img src="https://render.githubusercontent.com/render/math?math=(x,y)"> inside a triangle, you must perform the following.
+In addition, implement `Texture::get_level` as a helper function. You will need <img src="https://render.githubusercontent.com/render/math?math=(\frac{du}{dx}, \frac{dv}{dx})"> and <img src="https://render.githubusercontent.com/render/math?math=(\frac{du}{dy},\frac{dv}{dy})"> to calculate the correct mipmap level. In order to get these values corresponding to a point <img src="https://render.githubusercontent.com/render/math?math=(x,y)"> inside a triangle, you must perform the following.
 
 1. Calculate the barycentric coordinates of <img src="https://render.githubusercontent.com/render/math?math=(x,y)">, <img src="https://render.githubusercontent.com/render/math?math=$(x%2B1,y)$">, and <img src="https://render.githubusercontent.com/render/math?math=$(x,y%2B1)$"> in `rasterize_textured_triangle(...)`, ~~passing these to `tri->color` as the variables `p_dx_bary` and `p_dy_bary`,~~
 2. Calculate the *uv* coordinates of **the three points above, asign them to a `SampleParams` struct `sp`, along with other values required by the struct, and pass `sp` to `Texture::get_level`,** ~~`sp.p_dx_uv` and `sp.p_dy_uv` inside `tri_color`,~~
