@@ -22,8 +22,7 @@ The project has 6 tasks, worth a total of 100 possible points. Some require only
 ## Logistics
 
 ### Deadline
-* **Project 1** is due **Tuesday 2/18, 11:59PM**. The [**checkpoint quiz**](https://forms.gle/DQKEiZzFvFxKYMU69) is due **Tuesday 2/11, 11:59PM.** For the project, both your code and write-up need to be turned in for your submission to be complete. Assignments which are turned in after 11:59pm will use one of your late days -- there are no late minutes or late hours.
-
+**Project 1** is due **Tuesday 2/18, 11:59PM**. The [**checkpoint quiz**](https://forms.gle/DQKEiZzFvFxKYMU69) is due **Tuesday 2/11, 11:59PM.** For the project, both your code and write-up need to be turned in for your submission to be complete. Assignments which are turned in after 11:59PM will use one of your late days -- there are no late minutes or late hours. Please consult this article on [how to submit the assignment for CS184](https://cs184.eecs.berkeley.edu/sp20/article/15/submitting-cs184-assignments).
 
 ### Getting started
 
@@ -33,7 +32,7 @@ First, accept the assignment in your CS184 website profile, following the instru
     
 Also ensure GitHub Pages is enabled for your assignment.
 
-Please consult this [how to build and submit assignments for CS 184](https://cs184.eecs.berkeley.edu/sp20/article/11/building-and-submitting-cs184-as) article for more information on how to setup and build the project.
+Please consult this [how to build assignments for CS184](https://cs184.eecs.berkeley.edu/sp20/article/11/building-cs184-assignments) article for more information on how to setup and build the assignment.
 
 As you go through the assignment, [refer to the write-up guidelines and deliverables section below](#rubric). **It is recommended that you complete each section's write-up as you finish that section.** It's generally not a good idea to wait until the end to start your writeup. You may also find it helpful to skim the rubric before beginning your work.
 
@@ -294,7 +293,7 @@ Students will vote on their favorite submissions and the top voted submission(s)
 
 ## Submission
 
-Please consult this article on [how to build and submit assignments for CS 184](https://cs184.eecs.berkeley.edu/sp20/article/11/building-and-submitting-cs184-as).
+Please consult this article on [how to submit the assignment for CS184](https://cs184.eecs.berkeley.edu/sp20/article/15/submitting-cs184-assignments).
 
 You will submit your code as well as some deliverables (see below) in a webpage project write-up.
 
