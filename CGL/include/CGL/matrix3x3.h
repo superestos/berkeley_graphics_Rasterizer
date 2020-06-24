@@ -20,7 +20,7 @@ class Matrix3x3 {
   Matrix3x3(void) { 
     for( int i = 0; i < 3; i++ ) {
       for( int j = 0; j < 3; j++ ) {
-          (*this)(i,j) = (i==j) ? 1. : 0.;
+        (*this)(i,j) = (i==j) ? 1. : 0.;
       }
     }
   }
@@ -32,8 +32,8 @@ class Matrix3x3 {
   {
     for( int i = 0; i < 3; i++ ) {
       for( int j = 0; j < 3; j++ ) {
-	        // Transpostion happens within the () query.
-	        (*this)(i,j) = data[i*3 + j];
+	      // Transpostion happens within the () query.
+	      (*this)(i,j) = data[i*3 + j];
       }
     }
   }

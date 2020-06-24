@@ -1,38 +1,60 @@
 #include "texture.h"
 #include "CGL/color.h"
 
-#include <algorithm>
 #include <cmath>
+#include <algorithm>
 
 namespace CGL {
 
 Color Texture::sample(const SampleParams &sp) {
   // TODO: Task 6: Fill this in.
-  // return magenta for invalid level
 
-  return Color(1, 0, 1);
+  // NOTE: When assigning or passing Texture or MipLevel type, use pointers or reference!
+  // Remember that C/C++ is pass by reference, directly passing Texture or MipLevel
+  // will cause horrible performance.
+
+  // e.g. MipLevel& l = mipmap[0]; // This is pass by reference. Note that the type here is MipLevel&
+  // e.g. MipLevel* l = &mipmap[0]; // This is pass by pointer. Note that the type here is MipLevel*
+  // DO NOT do things like MipLevel l = mipmap[0]; This will cause a copy. You should only copy basic types
+  // like int, float, double, Vector2D, Vector3D, ... An exception is std::vector, you can return a std::vector
+  // from a function and it will not be duplicated.
+  
+
+  // return magenta for invalid level
+  return Color(1,0,1);
 }
 
 float Texture::get_level(const SampleParams &sp) {
   // TODO: Task 6: Fill this in.
+  // NOTE: When assigning or passing Texture or MipLevel type, use pointers or reference!
+  // Remember that C/C++ is pass by reference, directly passing Texture or MipLevel
+  // will cause horrible performance.
+
+
   return 0;
 }
 
 Color MipLevel::get_texel(int tx, int ty) {
-  return Color(&texels[tx * 3 + ty * width * 3]);
+  return Color(&texels[tx*3 + ty*width*3]);
 }
 
 Color Texture::sample_nearest(Vector2D uv, int level) {
   // TODO: Task 5: Fill this in.
+
+
   // return magenta for invalid level
-  return Color(1, 0, 1);
+  return Color(1,0,1);
 }
 
 Color Texture::sample_bilinear(Vector2D uv, int level) {
   // TODO: Task 5: Fill this in.
+
+
   // return magenta for invalid level
-  return Color(1, 0, 1);
+  return Color(1,0,1);
 }
+
+
 
 /****************************************************************************/
 
@@ -75,9 +97,9 @@ void Texture::generate_mips(int startLevel) {
 
     // handle odd size texture by rounding down
     width = max(1, width / 2);
-    // assert (width > 0);
+    //assert (width > 0);
     height = max(1, height / 2);
-    // assert (height > 0);
+    //assert (height > 0);
 
     level.width = width;
     level.height = height;
@@ -132,7 +154,7 @@ void Texture::generate_mips(int startLevel) {
 
     // case 1: reduction only in horizontal size (vertical size is 1)
     if (currLevel.height == prevLevel.height) {
-      // assert (currLevel.height == 1);
+      //assert (currLevel.height == 1);
 
       for (int i = 0; i < currLevel.width; i++) {
         wWeight[0] = wNorm * (1.0f - wDecimal * i);
@@ -154,7 +176,7 @@ void Texture::generate_mips(int startLevel) {
 
       // case 2: reduction only in vertical size (horizontal size is 1)
     } else if (currLevel.width == prevLevel.width) {
-      // assert (currLevel.width == 1);
+      //assert (currLevel.width == 1);
 
       for (int j = 0; j < currLevel.height; j++) {
         hWeight[0] = hNorm * (1.0f - hDecimal * j);
@@ -210,4 +232,4 @@ void Texture::generate_mips(int startLevel) {
   }
 }
 
-} // namespace CGL
+}

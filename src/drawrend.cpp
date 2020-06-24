@@ -334,7 +334,7 @@ void DrawRend::draw_pixels() {
   glMatrixMode(GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  //glOrtho(0, width, 0, height, 0, 0);
+  glOrtho(0, width, 0, height, 0, 0);
 
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();

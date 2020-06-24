@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.8)
 project(Assignment1)
 
 #-------------------------------------------------------------------------------
@@ -6,11 +6,19 @@ project(Assignment1)
 #-------------------------------------------------------------------------------
 option(BUILD_DEBUG     "Build with debug settings"    OFF)
 option(BUILD_DOCS      "Build documentation"          OFF)
+option(BUILD_CUSTOM    "Build without reference"      OFF)
+
+set(BUILD_DEBUG ${BUILD_DEBUG} CACHE BOOL "Build debug" FORCE)
+
+if (BUILD_DEBUG)
+  set(CMAKE_BUILD_TYPE Debug)
+endif()
 
 #-------------------------------------------------------------------------------
 # Set target
 #-------------------------------------------------------------------------------
 set(APPLICATION_SOURCE
+    
     src/texture.cpp
     src/triangulation.cpp
     src/svgparser.cpp
@@ -19,6 +27,7 @@ set(APPLICATION_SOURCE
     src/drawrend.cpp
     src/svg.cpp
     src/main.cpp
+    # Add headers for the sake of Xcode/Visual Studio projects
     src/rasterizer.h
     src/drawrend.h
     src/svg.h
@@ -28,14 +37,16 @@ set(APPLICATION_SOURCE
     src/triangulation.h
 )
 
-# dirent on Windows
 if (WIN32)
+    include_directories(src/dirent)
     list(APPEND APPLICATION_SOURCE src/dirent/dirent.c)
-endif()
+endif(WIN32)
 
 add_executable(draw ${APPLICATION_SOURCE})
 
-target_link_libraries(draw PUBLIC CGL)
+target_include_directories(draw PUBLIC src)
+
+set(CGL_INCLUDE_DIRS CGL/include CGL/deps/glew/include CGL/deps/glfw/include)
 
 #-------------------------------------------------------------------------------
 # Find dependencies
@@ -44,10 +55,12 @@ add_subdirectory(CGL)
 target_include_directories(draw PUBLIC ${CGL_INCLUDE_DIRS})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CGL_CXX_FLAGS}")
 
-# dirent on Windows
-if (WIN32)
-    target_include_directories(draw PUBLIC ${CMAKE_SOURCE_DIR}/src/dirent)
-endif()
+set(OpenGL_GL_PREFERENCE LEGACY)
+find_package(OpenGL REQUIRED)
+target_link_libraries(draw PUBLIC OpenGL::GL)
+target_link_libraries(draw PUBLIC OpenGL::GLU)
+
+target_link_libraries(draw PRIVATE CGL)
 
 #-------------------------------------------------------------------------------
 # Add subdirectories

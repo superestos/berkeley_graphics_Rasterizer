@@ -18,9 +18,11 @@ RasterizerImp::RasterizerImp(PixelSampleMethod psm, LevelSampleMethod lsm,
 
 // Used by rasterize_point and rasterize_line
 void RasterizerImp::fill_pixel(size_t x, size_t y, Color c) {
-  // TODO: Task 2: You might need to this function to fix points and lines (such as the black rectangle border in test4.svg)
+  // TODO: Task 2: You need to change this function to fix points and lines (such as the black rectangle border in test4.svg)
   // NOTE: You are not required to implement proper supersampling for points and lines
   // It is sufficient to use the same color for all supersamples of a pixel for points and lines (not triangles)
+  // NOTE: You should not use this function to fill the framebuffer pixel! In task 2, you should change this function so that
+  // it renders to the internal buffer instead of the framebuffer!
 
   rgb_framebuffer_target[3 * (y * width + x)    ] = (unsigned char)(c.r * 255);
   rgb_framebuffer_target[3 * (y * width + x) + 1] = (unsigned char)(c.g * 255);
@@ -35,7 +37,6 @@ void RasterizerImp::fill_supersample(size_t x, size_t y, size_t s, Color c) {
 
 // Rasterize a point: simple example to help you start familiarizing
 // yourself with the starter code.
-//
 void RasterizerImp::rasterize_point(float x, float y, Color color) {
   // fill in the nearest pixel
   int sx = (int)floor(x);
@@ -81,6 +82,9 @@ void RasterizerImp::rasterize_triangle(float x0, float y0,
   
   // TODO: Task 2: Update to implement super-sampled rasterization
   
+  Vector2D P0 = { x0, y0 }, P1 = { x1, y1 }, P2 = { x2, y2 };
+
+
 }
 
 
@@ -90,24 +94,31 @@ void RasterizerImp::rasterize_interpolated_color_triangle(float x0, float y0, Co
 {
   // TODO: Task 4: Rasterize the triangle, calculating barycentric coordinates and using them to interpolate vertex colors across the triangle
   // Hint: You can reuse code from rasterize_triangle
+  // Hint: Can you render a normal single colored triangle using this function?
+
 
 }
 
+
 void RasterizerImp::rasterize_textured_triangle(float x0, float y0, float u0, float v0,
-    float x1, float y1, float u1, float v1,
-    float x2, float y2, float u2, float v2,
-    Texture& tex)
+                                                     float x1, float y1, float u1, float v1,
+                                                     float x2, float y2, float u2, float v2,
+                                                     Texture &tex)
 {
-    // TODO: Task 5: Fill in the SampleParams struct and pass it to the tex.sample function.
-    // TODO: Task 6: Set the correct barycentric differentials in the SampleParams struct.
-    // Hint: You can reuse code from rasterize_triangle/rasterize_interpolated_color_triangle
+  // TODO: Task 5: Fill in the SampleParams struct and pass it to the tex.sample function.
+  // TODO: Task 6: Set the correct barycentric differentials in the SampleParams struct.
+  // Hint: You can reuse code from rasterize_triangle/rasterize_interpolated_color_triangle
+
+
 
 }
 
 void RasterizerImp::set_sample_rate(unsigned int rate) {
   // TODO: Task 2: You may want to update this function for supersampling support
+  // HINT: Different sampleing rate means you need different amount of space to store the samples
 
   this->sample_rate = rate;
+
 
 }
 
@@ -121,6 +132,8 @@ void RasterizerImp::set_framebuffer_target( unsigned char* rgb_framebuffer,
   this->height = height;
   this->rgb_framebuffer_target = rgb_framebuffer;
   
+
+
 }
 
 
@@ -130,6 +143,8 @@ void RasterizerImp::clear_buffers() {
 
   std::fill(rgb_framebuffer_target, rgb_framebuffer_target + 3 * width * height, 255);
 
+
+
 }
 
 
@@ -137,9 +152,10 @@ void RasterizerImp::clear_buffers() {
 // SVG file.  If you use a supersample buffer to rasterize SVG elements
 // for antialising, you could use this call to fill the target framebuffer
 // pixels from the supersample buffer data.
-//
 void RasterizerImp::resolve_to_framebuffer() {
   // TODO: Task 2: You will likely want to update this function for supersampling support
+  // NOTE: Check the rendering pipeline description in task 2 specs.
+
 
   
 }

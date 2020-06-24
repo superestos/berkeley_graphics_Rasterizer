@@ -32,26 +32,31 @@ endif()
 #-------------------------------------------------------------------------------
 # Compiler-specific Options
 #-------------------------------------------------------------------------------
+
+include(find_avx.cmake)
+CHECK_FOR_AVX()
+
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL Clang OR ${CMAKE_CXX_COMPILER_ID} STREQUAL AppleClang)
-    set(CGL_CXX_FLAGS "-std=c++11 -m64")
-    if(NOT CGL_BUILD_DEBUG)
-        set(CGL_CXX_FLAGS "${CGL_CXX_FLAGS} -O4")
-    endif()
+    set(CGL_CXX_FLAGS "-std=c++11 -m64 -fPIC")
+    set(CGL_CXX_FLAGS "${CGL_CXX_FLAGS} -O3")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 endif()
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL GNU)
-    set(CGL_CXX_FLAGS "-std=c++11 -m64")
-    if(NOT CGL_BUILD_DEBUG)
-        set(CGL_CXX_FLAGS "${CGL_CXX_FLAGS} -O3 -fopenmp")
+    set(CGL_CXX_FLAGS "-std=c++11 -m64 -fPIC")
+    set(CGL_CXX_FLAGS "${CGL_CXX_FLAGS} -O3")
+    if (CGL_BUILD_DEBUG)
+        set(CGL_CXX_FLAGS "${CGL_CXX_FLAGS} -ggdb")
     endif()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 endif()
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL MSVC)
     set(CGL_CXX_FLAGS "/std:c++17 /wd4838 /wd4305 /wd4244 /wd4267")
-    if(NOT CGL_BUILD_DEBUG)
-        set(CGL_CXX_FLAGS "${CGL_CXX_FLAGS} /O2")
-    endif()
+    set(CGL_CXX_FLAGS "${CGL_CXX_FLAGS} /O2")
 endif()
+
+set(CGL_CXX_FLAGS "${CGL_CXX_FLAGS} ${AVX_FLAGS}")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CGL_CXX_FLAGS}")
 

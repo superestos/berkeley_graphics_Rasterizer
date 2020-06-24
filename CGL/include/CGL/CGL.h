@@ -7,6 +7,8 @@
 
 namespace CGL {
 
+typedef double CGLfloat;
+
 class Vector2D;
 class Vector3D;
 class Vector4D;
@@ -18,7 +20,7 @@ class Quaternion;
 class Complex;
 
 class Color;
-class Spectrum;
+typedef Vector3D Spectrum;
 
 class Renderer;
 class OSDText;
