@@ -100,9 +100,9 @@ namespace CGL {
     const Matrix3x3& A( *this );
     Matrix3x3 C;
 
-    C[0] = A[0] * B[0];
-    C[1] = A[1] * B[1];
-    C[2] = A[2] * B[2];
+    C[0] = A * B[0];
+    C[1] = A * B[1];
+    C[2] = A * B[2];
 
     return C;
   }
