@@ -143,9 +143,9 @@ namespace CGL {
     Matrix3x3& A( *this );
     double rx = 1./x;
 
-    A[0] *= x;
-    A[1] *= x;
-    A[2] *= x;
+    A[0] *= rx;
+    A[1] *= rx;
+    A[2] *= rx;
   }
 
   Matrix3x3 Matrix3x3::identity( void ) {
