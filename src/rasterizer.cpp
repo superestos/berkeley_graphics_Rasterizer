@@ -24,15 +24,21 @@ void RasterizerImp::fill_pixel(size_t x, size_t y, Color c) {
   // NOTE: You should not use this function to fill the framebuffer pixel! In task 2, you should change this function so that
   // it renders to the internal buffer instead of the framebuffer!
 
+  /*
   rgb_framebuffer_target[3 * (y * width + x)    ] = (unsigned char)(c.r * 255);
   rgb_framebuffer_target[3 * (y * width + x) + 1] = (unsigned char)(c.g * 255);
   rgb_framebuffer_target[3 * (y * width + x) + 2] = (unsigned char)(c.b * 255);
+  */
+
+  for (size_t i = 0; i < sample_rate; i++) {
+    fill_supersample(x, y, i, c);
+  }
 }
 
 // Optional helper function to add a sample to the supersample_buffer
 void RasterizerImp::fill_supersample(size_t x, size_t y, size_t s, Color c) {
   // TODO: Task 2: You may want to implement this function. Hint: our solution uses one line
-
+  supersample_buffer[(y * width + x) * sample_rate + s] = c;
 };
 
 // Rasterize a point: simple example to help you start familiarizing
@@ -101,12 +107,18 @@ void RasterizerImp::rasterize_triangle(float x0, float y0,
   int test1 = line_test(P1, P2, P0);
   int test2 = line_test(P2, P0, P1);
 
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
-      Vector2D P = {x + 0.5, y + 0.5};
-      if (test0 * line_test(P, P1, P2) > 0 && test1 * line_test(P, P2, P0) > 0 && test2 * line_test(P, P0, P1) > 0) {
-        rasterize_point(x, y, color);
-      }
+  size_t sample_scale = sqrt(sample_rate);
+
+  for (size_t y = 0; y < height; y++) {
+    for (size_t x = 0; x < width; x++) {
+        for (size_t i = 0; i < sample_scale; i++) {
+          for (size_t j = 0; j < sample_scale; j++) {
+            Vector2D P = {x + (1.0 + 2 * j) / (2.0 * sample_scale), y + (1.0 + 2 * j) / (2.0 * sample_scale)};
+            if (test0 * line_test(P, P1, P2) > 0 && test1 * line_test(P, P2, P0) > 0 && test2 * line_test(P, P0, P1) > 0) {
+              fill_supersample(x, y, i * sample_scale + j, color);
+            }
+          }
+        }
     }
   }
 }
@@ -142,8 +154,8 @@ void RasterizerImp::set_sample_rate(unsigned int rate) {
   // HINT: Different sampleing rate means you need different amount of space to store the samples
 
   this->sample_rate = rate;
-
-
+  supersample_buffer.resize(width * height * sample_rate, Color::White);
+  clear_buffers();
 }
 
 
@@ -155,8 +167,8 @@ void RasterizerImp::set_framebuffer_target( unsigned char* rgb_framebuffer,
   this->width = width;
   this->height = height;
   this->rgb_framebuffer_target = rgb_framebuffer;
-  
-
+  supersample_buffer.resize(width * height * sample_rate, Color::White);
+  clear_buffers();
 
 }
 
@@ -166,7 +178,7 @@ void RasterizerImp::clear_buffers() {
   // Hint: With supersampling, you have an additional buffer to take care of
 
   std::fill(rgb_framebuffer_target, rgb_framebuffer_target + 3 * width * height, 255);
-
+  std::fill(supersample_buffer.begin(), supersample_buffer.end(), Color::White);
 
 
 }
@@ -180,7 +192,17 @@ void RasterizerImp::resolve_to_framebuffer() {
   // TODO: Task 2: You will likely want to update this function for supersampling support
   // NOTE: Check the rendering pipeline description in task 2 specs.
 
-
+  for (size_t y = 0; y < height; y++) {
+    for (size_t x = 0; x < width; x++) {
+      Color c;
+      for (size_t i = 0; i < sample_rate; i++) {
+        c += supersample_buffer[(y * width + x) * sample_rate + i] * (1.0 / sample_rate);
+      }
+      rgb_framebuffer_target[3 * (y * width + x)    ] = (unsigned char)(c.r * 255);
+      rgb_framebuffer_target[3 * (y * width + x) + 1] = (unsigned char)(c.g * 255);
+      rgb_framebuffer_target[3 * (y * width + x) + 2] = (unsigned char)(c.b * 255);
+    }
+  }
   
 }
 
