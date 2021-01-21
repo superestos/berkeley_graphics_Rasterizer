@@ -73,6 +73,19 @@ void RasterizerImp::rasterize_line(float x0, float y0,
   }
 }
 
+int RasterizerImp::line_test(Vector2D P, Vector2D P1, Vector2D P2) {
+  double result = (P2.y - P1.y) * (P.x - P1.x) - (P2.x - P1.x) * (P.y - P1.y);
+  if (result > 0) {
+    return 1;
+  }
+  else if (result < 0) {
+    return -1;
+  }
+  else {
+    return 0;
+  }
+}
+
 // Rasterize a triangle.
 void RasterizerImp::rasterize_triangle(float x0, float y0,
                                        float x1, float y1,
@@ -84,7 +97,18 @@ void RasterizerImp::rasterize_triangle(float x0, float y0,
   
   Vector2D P0 = { x0, y0 }, P1 = { x1, y1 }, P2 = { x2, y2 };
 
+  int test0 = line_test(P0, P1, P2);
+  int test1 = line_test(P1, P2, P0);
+  int test2 = line_test(P2, P0, P1);
 
+  for (int y = 0; y < height; y++) {
+    for (int x = 0; x < width; x++) {
+      Vector2D P = {x + 0.5, y + 0.5};
+      if (test0 * line_test(P, P1, P2) > 0 && test1 * line_test(P, P2, P0) > 0 && test2 * line_test(P, P0, P1) > 0) {
+        rasterize_point(x, y, color);
+      }
+    }
+  }
 }
 
 
