@@ -31,8 +31,7 @@ float Texture::get_level(const SampleParams &sp) {
   // Remember that C/C++ is pass by reference, directly passing Texture or MipLevel
   // will cause horrible performance.
 
-
-  return 0;
+  return log(std::max(sp.p_dx_uv.norm() * width, sp.p_dy_uv.norm() * height));
 }
 
 Color MipLevel::get_texel(int tx, int ty) {

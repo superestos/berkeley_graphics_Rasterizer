@@ -83,6 +83,8 @@ private:
 
   double line_test(Vector2D P, Vector2D P1, Vector2D P2);
 
+  float rasterizer_level(Vector2D uv0, Vector2D uv1, Vector2D uv2, Vector2D P0, Vector2D P1, Vector2D P2, Texture &tex);
+
 public:
   
   RasterizerImp(PixelSampleMethod psm, LevelSampleMethod lsm,

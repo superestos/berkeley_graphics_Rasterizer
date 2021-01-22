@@ -139,6 +139,22 @@ void RasterizerImp::rasterize_interpolated_color_triangle(float x0, float y0, Co
   }
 }
 
+float RasterizerImp::rasterizer_level(Vector2D uv0, Vector2D uv1, Vector2D uv2, Vector2D P0, Vector2D P1, Vector2D P2, Texture &tex) {
+  SampleParams sp;
+  Vector2D Po = { 0, 0 }, Px = { 1, 0 }, Py = { 0, 1 };
+
+  double test0 = line_test(P0, P1, P2);
+  double test1 = line_test(P1, P2, P0);
+  double test2 = line_test(P2, P0, P1);
+
+  const double eps = 1e-6;
+
+  sp.p_uv = (line_test(Po, P1, P2) / (test0 + eps)) * uv0 + (line_test(Po, P2, P0) / (test1 + eps)) * uv1 + (line_test(Po, P0, P1) / (test2 + eps)) * uv2;
+  sp.p_dx_uv = (line_test(Px, P1, P2) / (test0 + eps)) * uv0 + (line_test(Px, P2, P0) / (test1 + eps)) * uv1 + (line_test(Px, P0, P1) / (test2 + eps)) * uv2 - sp.p_uv;
+  sp.p_dy_uv = (line_test(Py, P1, P2) / (test0 + eps)) * uv0 + (line_test(Py, P2, P0) / (test1 + eps)) * uv1 + (line_test(Py, P0, P1) / (test2 + eps)) * uv2 - sp.p_uv;
+
+  return tex.get_level(sp);
+}
 
 void RasterizerImp::rasterize_textured_triangle(float x0, float y0, float u0, float v0,
                                                      float x1, float y1, float u1, float v1,
@@ -158,6 +174,8 @@ void RasterizerImp::rasterize_textured_triangle(float x0, float y0, float u0, fl
 
   const double eps = 1e-6;
 
+  float level = rasterizer_level(uv0, uv1, uv2, P0, P1, P2, tex);
+
   for (size_t y = 0; y < height; y++) {
     for (size_t x = 0; x < width; x++) {
         for (size_t i = 0; i < sample_scale; i++) {
@@ -172,7 +190,13 @@ void RasterizerImp::rasterize_textured_triangle(float x0, float y0, float u0, fl
               else if (psm == P_LINEAR) {
                 c = tex.sample_bilinear(uv);
               }
-              fill_supersample(x, y, i * sample_scale + j, c);
+
+              if (lsm == L_ZERO) {
+                fill_supersample(x, y, i * sample_scale + j, c);
+              }
+              else {
+                fill_supersample(x, y, i * sample_scale + j, Color(0.2, 0, 0) * level);
+              }
             }
           }
         }
