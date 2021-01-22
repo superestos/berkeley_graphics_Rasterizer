@@ -149,7 +149,35 @@ void RasterizerImp::rasterize_textured_triangle(float x0, float y0, float u0, fl
   // TODO: Task 6: Set the correct barycentric differentials in the SampleParams struct.
   // Hint: You can reuse code from rasterize_triangle/rasterize_interpolated_color_triangle
 
+  Vector2D P0 = { x0, y0 }, P1 = { x1, y1 }, P2 = { x2, y2 };
+  Vector2D uv0 = {u0, v0}, uv1 = {u1, v1}, uv2 = {u2, v2};
 
+  double test0 = line_test(P0, P1, P2);
+  double test1 = line_test(P1, P2, P0);
+  double test2 = line_test(P2, P0, P1);
+
+  const double eps = 1e-6;
+
+  for (size_t y = 0; y < height; y++) {
+    for (size_t x = 0; x < width; x++) {
+        for (size_t i = 0; i < sample_scale; i++) {
+          for (size_t j = 0; j < sample_scale; j++) {
+            Vector2D P = {x + (1.0 + 2 * j) / (2.0 * sample_scale), y + (1.0 + 2 * j) / (2.0 * sample_scale)};
+            if (test0 * line_test(P, P1, P2) >= 0 && test1 * line_test(P, P2, P0) >= 0 && test2 * line_test(P, P0, P1) >= 0) {
+              Vector2D uv = (line_test(P, P1, P2) / (test0 + eps)) * uv0 + (line_test(P, P2, P0) / (test1 + eps)) * uv1 + (line_test(P, P0, P1) / (test2 + eps)) * uv2;
+              Color c;
+              if (psm == P_NEAREST) {
+                c = tex.sample_nearest(uv);
+              }
+              else if (psm == P_LINEAR) {
+                c = tex.sample_bilinear(uv);
+              }
+              fill_supersample(x, y, i * sample_scale + j, c);
+            }
+          }
+        }
+    }
+  }
 
 }
 

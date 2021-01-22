@@ -1,5 +1,6 @@
 #include "texture.h"
 #include "CGL/color.h"
+#include "assert.h"
 
 #include <cmath>
 #include <algorithm>
@@ -40,18 +41,36 @@ Color MipLevel::get_texel(int tx, int ty) {
 
 Color Texture::sample_nearest(Vector2D uv, int level) {
   // TODO: Task 5: Fill this in.
-
+  int x = (int)floor(uv.x * mipmap[level].width);
+  int y = (int)floor(uv.y * mipmap[level].height);
 
   // return magenta for invalid level
-  return Color(1,0,1);
+  return mipmap[level].get_texel(x, y);
 }
 
 Color Texture::sample_bilinear(Vector2D uv, int level) {
   // TODO: Task 5: Fill this in.
+  double x = uv.x * mipmap[level].width;
+  double y = uv.y * mipmap[level].height;
 
+  int sx0 = (int)floor(x - 0.5);
+  int sy0 = (int)floor(y - 0.5);
+  int sx1 = (int)floor(x + 0.5);
+  int sy1 = (int)floor(y + 0.5);
+
+  sx0 = sx0 < 0? 0: sx0;
+  sy0 = sy0 < 0? 0: sy0;
+  sx1 = sx1 >= width? width - 1: sx1;
+  sy1 = sy1 >= height? height - 1: sy1;
+
+  assert(sx0 == sx1 || sx0 + 1 == sx1);
+
+  Color cy0 = (x - sx0 - 0.5) * mipmap[level].get_texel(sx1, sy0) + (sx1 - x + 0.5) * mipmap[level].get_texel(sx0, sy0);
+  Color cy1 = (x - sx0 - 0.5) * mipmap[level].get_texel(sx1, sy1) + (sx1 - x + 0.5) * mipmap[level].get_texel(sx0, sy1);
+  Color c = (y - sy0 - 0.5) * cy1 + (sy1 - y + 0.5) * cy0;
 
   // return magenta for invalid level
-  return Color(1,0,1);
+  return c;
 }
 
 
