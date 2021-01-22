@@ -79,7 +79,7 @@ private:
   // The number of elements in buffer = width * height * sample_rate
   std::vector<Color> supersample_buffer;
 
-  int line_test(Vector2D P, Vector2D P1, Vector2D P2);
+  double line_test(Vector2D P, Vector2D P1, Vector2D P2);
 
 public:
   

@@ -73,17 +73,8 @@ void RasterizerImp::rasterize_line(float x0, float y0,
   }
 }
 
-int RasterizerImp::line_test(Vector2D P, Vector2D P1, Vector2D P2) {
-  double result = (P2.y - P1.y) * (P.x - P1.x) - (P2.x - P1.x) * (P.y - P1.y);
-  if (result > 0) {
-    return 1;
-  }
-  else if (result < 0) {
-    return -1;
-  }
-  else {
-    return 0;
-  }
+double RasterizerImp::line_test(Vector2D P, Vector2D P1, Vector2D P2) {
+  return (P2.y - P1.y) * (P.x - P1.x) - (P2.x - P1.x) * (P.y - P1.y);
 }
 
 // Rasterize a triangle.
@@ -97,9 +88,9 @@ void RasterizerImp::rasterize_triangle(float x0, float y0,
   
   Vector2D P0 = { x0, y0 }, P1 = { x1, y1 }, P2 = { x2, y2 };
 
-  int test0 = line_test(P0, P1, P2);
-  int test1 = line_test(P1, P2, P0);
-  int test2 = line_test(P2, P0, P1);
+  double test0 = line_test(P0, P1, P2);
+  double test1 = line_test(P1, P2, P0);
+  double test2 = line_test(P2, P0, P1);
 
   size_t sample_scale = sqrt(sample_rate);
 
@@ -126,7 +117,29 @@ void RasterizerImp::rasterize_interpolated_color_triangle(float x0, float y0, Co
   // Hint: You can reuse code from rasterize_triangle
   // Hint: Can you render a normal single colored triangle using this function?
 
+  Vector2D P0 = { x0, y0 }, P1 = { x1, y1 }, P2 = { x2, y2 };
 
+  double test0 = line_test(P0, P1, P2);
+  double test1 = line_test(P1, P2, P0);
+  double test2 = line_test(P2, P0, P1);
+
+  const double eps = 1e-6;
+
+  size_t sample_scale = sqrt(sample_rate);
+
+  for (size_t y = 0; y < height; y++) {
+    for (size_t x = 0; x < width; x++) {
+        for (size_t i = 0; i < sample_scale; i++) {
+          for (size_t j = 0; j < sample_scale; j++) {
+            Vector2D P = {x + (1.0 + 2 * j) / (2.0 * sample_scale), y + (1.0 + 2 * j) / (2.0 * sample_scale)};
+            if (test0 * line_test(P, P1, P2) >= 0 && test1 * line_test(P, P2, P0) >= 0 && test2 * line_test(P, P0, P1) >= 0) {
+              Color c = (line_test(P, P1, P2) / (test0 + eps)) * c0 + (line_test(P, P2, P0) / (test1 + eps)) * c1 + (line_test(P, P0, P1) / (test2 + eps)) * c2;
+              fill_supersample(x, y, i * sample_scale + j, c);
+            }
+          }
+        }
+    }
+  }
 }
 
 
@@ -149,7 +162,7 @@ void RasterizerImp::set_sample_rate(unsigned int rate) {
 
   this->sample_rate = rate;
   supersample_buffer.resize(width * height * sample_rate, Color::White);
-  //clear_buffers();
+
 }
 
 
@@ -162,7 +175,6 @@ void RasterizerImp::set_framebuffer_target( unsigned char* rgb_framebuffer,
   this->height = height;
   this->rgb_framebuffer_target = rgb_framebuffer;
   supersample_buffer.resize(width * height * sample_rate, Color::White);
-  //clear_buffers();
 
 }
 
