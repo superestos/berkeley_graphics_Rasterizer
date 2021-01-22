@@ -62,6 +62,8 @@ private:
   // The total number of samples
   unsigned int sample_rate;
 
+  unsigned int sample_scale;
+
   // Constants indicating which sampling methods are used
   PixelSampleMethod psm;
   LevelSampleMethod lsm;

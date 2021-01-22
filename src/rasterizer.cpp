@@ -12,6 +12,7 @@ RasterizerImp::RasterizerImp(PixelSampleMethod psm, LevelSampleMethod lsm,
   this->width = width;
   this->height = height;
   this->sample_rate = sample_rate;
+  this->sample_scale = sqrt(sample_rate);
 
   supersample_buffer.resize(width * height * sample_rate, Color::White);
 }
@@ -92,8 +93,6 @@ void RasterizerImp::rasterize_triangle(float x0, float y0,
   double test1 = line_test(P1, P2, P0);
   double test2 = line_test(P2, P0, P1);
 
-  size_t sample_scale = sqrt(sample_rate);
-
   for (size_t y = 0; y < height; y++) {
     for (size_t x = 0; x < width; x++) {
         for (size_t i = 0; i < sample_scale; i++) {
@@ -124,8 +123,6 @@ void RasterizerImp::rasterize_interpolated_color_triangle(float x0, float y0, Co
   double test2 = line_test(P2, P0, P1);
 
   const double eps = 1e-6;
-
-  size_t sample_scale = sqrt(sample_rate);
 
   for (size_t y = 0; y < height; y++) {
     for (size_t x = 0; x < width; x++) {
@@ -161,6 +158,7 @@ void RasterizerImp::set_sample_rate(unsigned int rate) {
   // HINT: Different sampleing rate means you need different amount of space to store the samples
 
   this->sample_rate = rate;
+  this->sample_scale = sqrt(sample_rate);
   supersample_buffer.resize(width * height * sample_rate, Color::White);
 
 }
