@@ -93,16 +93,21 @@ void RasterizerImp::rasterize_triangle(float x0, float y0,
   double test1 = line_test(P1, P2, P0);
   double test2 = line_test(P2, P0, P1);
 
-  for (size_t y = 0; y < height; y++) {
-    for (size_t x = 0; x < width; x++) {
-        for (size_t i = 0; i < sample_scale; i++) {
-          for (size_t j = 0; j < sample_scale; j++) {
-            Vector2D P = {x + (1.0 + 2 * j) / (2.0 * sample_scale), y + (1.0 + 2 * j) / (2.0 * sample_scale)};
-            if (test0 * line_test(P, P1, P2) >= 0 && test1 * line_test(P, P2, P0) >= 0 && test2 * line_test(P, P0, P1) >= 0) {
-              fill_supersample(x, y, i * sample_scale + j, color);
-            }
+  size_t minx = std::max((size_t)0, (size_t)floor(std::min(x0, std::min(x1, x2))));
+  size_t maxx = std::min(width - 1, (size_t)floor(std::max(x0, std::max(x1, x2))) + 1);
+  size_t miny = std::max((size_t)0, (size_t)floor(std::min(y0, std::min(y1, y2))));
+  size_t maxy = std::min(height - 1, (size_t)floor(std::max(y0, std::max(y1, y2))) + 1);
+
+  for (size_t y = miny; y <= maxy; y++) {
+    for (size_t x = minx; x <= maxx; x++) {
+      for (size_t i = 0; i < sample_scale; i++) {
+        for (size_t j = 0; j < sample_scale; j++) {
+          Vector2D P = {x + (1.0 + 2 * j) / (2.0 * sample_scale), y + (1.0 + 2 * j) / (2.0 * sample_scale)};
+          if (test0 * line_test(P, P1, P2) >= 0 && test1 * line_test(P, P2, P0) >= 0 && test2 * line_test(P, P0, P1) >= 0) {
+            fill_supersample(x, y, i * sample_scale + j, color);
           }
         }
+      }
     }
   }
 }
@@ -126,15 +131,15 @@ void RasterizerImp::rasterize_interpolated_color_triangle(float x0, float y0, Co
 
   for (size_t y = 0; y < height; y++) {
     for (size_t x = 0; x < width; x++) {
-        for (size_t i = 0; i < sample_scale; i++) {
-          for (size_t j = 0; j < sample_scale; j++) {
-            Vector2D P = {x + (1.0 + 2 * j) / (2.0 * sample_scale), y + (1.0 + 2 * j) / (2.0 * sample_scale)};
-            if (test0 * line_test(P, P1, P2) >= 0 && test1 * line_test(P, P2, P0) >= 0 && test2 * line_test(P, P0, P1) >= 0) {
-              Color c = (line_test(P, P1, P2) / (test0 + eps)) * c0 + (line_test(P, P2, P0) / (test1 + eps)) * c1 + (line_test(P, P0, P1) / (test2 + eps)) * c2;
-              fill_supersample(x, y, i * sample_scale + j, c);
-            }
+      for (size_t i = 0; i < sample_scale; i++) {
+        for (size_t j = 0; j < sample_scale; j++) {
+          Vector2D P = {x + (1.0 + 2 * j) / (2.0 * sample_scale), y + (1.0 + 2 * j) / (2.0 * sample_scale)};
+          if (test0 * line_test(P, P1, P2) >= 0 && test1 * line_test(P, P2, P0) >= 0 && test2 * line_test(P, P0, P1) >= 0) {
+            Color c = (line_test(P, P1, P2) / (test0 + eps)) * c0 + (line_test(P, P2, P0) / (test1 + eps)) * c1 + (line_test(P, P0, P1) / (test2 + eps)) * c2;
+            fill_supersample(x, y, i * sample_scale + j, c);
           }
         }
+      }
     }
   }
 }
@@ -178,41 +183,41 @@ void RasterizerImp::rasterize_textured_triangle(float x0, float y0, float u0, fl
 
   for (size_t y = 0; y < height; y++) {
     for (size_t x = 0; x < width; x++) {
-        for (size_t i = 0; i < sample_scale; i++) {
-          for (size_t j = 0; j < sample_scale; j++) {
-            Vector2D P = {x + (1.0 + 2 * j) / (2.0 * sample_scale), y + (1.0 + 2 * j) / (2.0 * sample_scale)};
-            if (test0 * line_test(P, P1, P2) >= 0 && test1 * line_test(P, P2, P0) >= 0 && test2 * line_test(P, P0, P1) >= 0) {
-              Vector2D uv = (line_test(P, P1, P2) / (test0 + eps)) * uv0 + (line_test(P, P2, P0) / (test1 + eps)) * uv1 + (line_test(P, P0, P1) / (test2 + eps)) * uv2;
-              Color c;
+      for (size_t i = 0; i < sample_scale; i++) {
+        for (size_t j = 0; j < sample_scale; j++) {
+          Vector2D P = {x + (1.0 + 2 * j) / (2.0 * sample_scale), y + (1.0 + 2 * j) / (2.0 * sample_scale)};
+          if (test0 * line_test(P, P1, P2) >= 0 && test1 * line_test(P, P2, P0) >= 0 && test2 * line_test(P, P0, P1) >= 0) {
+            Vector2D uv = (line_test(P, P1, P2) / (test0 + eps)) * uv0 + (line_test(P, P2, P0) / (test1 + eps)) * uv1 + (line_test(P, P0, P1) / (test2 + eps)) * uv2;
+            Color c;
 
-              if (lsm == L_ZERO) {
-                if (psm == P_NEAREST) {
-                  c = tex.sample_nearest(uv);
-                }
-                else if (psm == P_LINEAR) {
-                  c = tex.sample_bilinear(uv);
-                }
+            if (lsm == L_ZERO) {
+              if (psm == P_NEAREST) {
+                c = tex.sample_nearest(uv);
               }
-              else if (lsm == L_NEAREST) {
-                if (psm == P_NEAREST) {
-                  c = tex.sample_nearest(uv, round(level));
-                }
-                else if (psm == P_LINEAR) {
-                  c = tex.sample_bilinear(uv, round(level));
-                }
+              else if (psm == P_LINEAR) {
+                c = tex.sample_bilinear(uv);
               }
-              else if (lsm == L_LINEAR) {
-                if (psm == P_NEAREST) {
-                  c = tex.sample_nearest(uv, (int)floor(level)) * (1 - level + floor(level)) + tex.sample_nearest(uv, (int)floor(level) + 1) * (level - floor(level));
-                }
-                else if (psm == P_LINEAR) {
-                  c = tex.sample_bilinear(uv, (int)floor(level)) * (1 - level + floor(level)) + tex.sample_bilinear(uv, (int)floor(level) + 1) * (level - floor(level));
-                }
-              }
-              fill_supersample(x, y, i * sample_scale + j, c);
             }
+            else if (lsm == L_NEAREST) {
+              if (psm == P_NEAREST) {
+                c = tex.sample_nearest(uv, round(level));
+              }
+              else if (psm == P_LINEAR) {
+                c = tex.sample_bilinear(uv, round(level));
+              }
+            }
+            else if (lsm == L_LINEAR) {
+              if (psm == P_NEAREST) {
+                c = tex.sample_nearest(uv, (int)floor(level)) * (1 - level + floor(level)) + tex.sample_nearest(uv, (int)floor(level) + 1) * (level - floor(level));
+              }
+              else if (psm == P_LINEAR) {
+                c = tex.sample_bilinear(uv, (int)floor(level)) * (1 - level + floor(level)) + tex.sample_bilinear(uv, (int)floor(level) + 1) * (level - floor(level));
+              }
+            }
+            fill_supersample(x, y, i * sample_scale + j, c);
           }
         }
+      }
     }
   }
 
