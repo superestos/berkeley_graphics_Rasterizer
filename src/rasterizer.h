@@ -85,6 +85,8 @@ private:
 
   float rasterizer_level(Vector2D uv0, Vector2D uv1, Vector2D uv2, Vector2D P0, Vector2D P1, Vector2D P2, Texture &tex);
 
+  void get_triangle_points(Vector2D P0, Vector2D P1, Vector2D P2, std::vector<std::array<size_t, 3>> &samples, std::vector<Vector3D> &barycentric);
+
 public:
   
   RasterizerImp(PixelSampleMethod psm, LevelSampleMethod lsm,
