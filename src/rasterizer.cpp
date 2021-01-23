@@ -184,19 +184,32 @@ void RasterizerImp::rasterize_textured_triangle(float x0, float y0, float u0, fl
             if (test0 * line_test(P, P1, P2) >= 0 && test1 * line_test(P, P2, P0) >= 0 && test2 * line_test(P, P0, P1) >= 0) {
               Vector2D uv = (line_test(P, P1, P2) / (test0 + eps)) * uv0 + (line_test(P, P2, P0) / (test1 + eps)) * uv1 + (line_test(P, P0, P1) / (test2 + eps)) * uv2;
               Color c;
-              if (psm == P_NEAREST) {
-                c = tex.sample_nearest(uv);
-              }
-              else if (psm == P_LINEAR) {
-                c = tex.sample_bilinear(uv);
-              }
 
               if (lsm == L_ZERO) {
-                fill_supersample(x, y, i * sample_scale + j, c);
+                if (psm == P_NEAREST) {
+                  c = tex.sample_nearest(uv);
+                }
+                else if (psm == P_LINEAR) {
+                  c = tex.sample_bilinear(uv);
+                }
               }
-              else {
-                fill_supersample(x, y, i * sample_scale + j, Color(0.2, 0, 0) * level);
+              else if (lsm == L_NEAREST) {
+                if (psm == P_NEAREST) {
+                  c = tex.sample_nearest(uv, round(level));
+                }
+                else if (psm == P_LINEAR) {
+                  c = tex.sample_bilinear(uv, round(level));
+                }
               }
+              else if (lsm == L_LINEAR) {
+                if (psm == P_NEAREST) {
+                  c = tex.sample_nearest(uv, (int)floor(level)) * (1 - level + floor(level)) + tex.sample_nearest(uv, (int)floor(level) + 1) * (level - floor(level));
+                }
+                else if (psm == P_LINEAR) {
+                  c = tex.sample_bilinear(uv, (int)floor(level)) * (1 - level + floor(level)) + tex.sample_bilinear(uv, (int)floor(level) + 1) * (level - floor(level));
+                }
+              }
+              fill_supersample(x, y, i * sample_scale + j, c);
             }
           }
         }
